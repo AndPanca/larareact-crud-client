@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { IconButton } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -22,35 +22,40 @@ const StyledTableRow = withStyles((theme) => ({
     },
 }))(TableRow);
 
-function createData(id, name, year, gender, email, phone, address) {
-    return { id, name, year, gender, email, phone, address };
+class Identitas extends Component {
+    onEdit = () => {
+        this.props.onEdit(this.props.identitas);
+    };
+
+    // Fungsi yang dipanggil oleh button Delete, kemudian dikirim ke PROPS IdentitasList berdasarkan ID identitas
+    onDelete = () => {
+        this.props.onDelete(this.props.identitas.id);
+    };
+
+    render() {
+        // Menerima/Menangkap mapping data PROPS dari IdentitasList.js untuk ditampilkan
+        const { id, name, birthday, gender, email, phone, address } = this.props.identitas;
+        return (
+            <tbody>
+                <StyledTableRow key={id}>
+                    <StyledTableCell scope="row">
+                        {id}
+                    </StyledTableCell>
+                    <StyledTableCell>{name}</StyledTableCell>
+                    <StyledTableCell>{birthday}</StyledTableCell>
+                    <StyledTableCell>{gender}</StyledTableCell>
+                    <StyledTableCell>{email}</StyledTableCell>
+                    <StyledTableCell>{phone}</StyledTableCell>
+                    <StyledTableCell>{address}</StyledTableCell>
+                    <StyledTableCell>
+                        <IconButton aria-label="edit" onClick={this.onEdit}> <EditIcon /> </IconButton>
+                        {/* onDelete adalah eventHandler untuk delete by ID  dengan memanggil props onDelete*/}
+                        <IconButton aria-label="delete" onClick={this.onDelete}> <DeleteIcon /> </IconButton> 
+                    </StyledTableCell>
+                </StyledTableRow>
+            </tbody>
+        );
+    }
 }
 
-const rows = [
-    createData(16523166,'Andri Panca', 1998, 'Male', 'andpanca@gmail.com', '+6281818937222', 'Jogja' ),
-    createData(16523166,'Andri Panca', 1998, 'Male', 'andpanca@gmail.com', '+6281818937222', 'Jogja' ),
-];
-
-export const Identitas = () => {
-    return (
-        <>
-        {rows.map((row) => (
-            <StyledTableRow key={row.id}>
-                <StyledTableCell scope="row">
-                    {row.id}
-                </StyledTableCell>
-                <StyledTableCell>{row.name}</StyledTableCell>
-                <StyledTableCell align="right">{row.year}</StyledTableCell>
-                <StyledTableCell>{row.gender}</StyledTableCell>
-                <StyledTableCell>{row.email}</StyledTableCell>
-                <StyledTableCell align="right">{row.phone}</StyledTableCell>
-                <StyledTableCell>{row.address}</StyledTableCell>
-                <StyledTableCell>
-                    <IconButton aria-label="edit"> <EditIcon /> </IconButton>
-                    <IconButton aria-label="delete"> <DeleteIcon /> </IconButton>
-                </StyledTableCell>
-            </StyledTableRow>
-        ))}
-        </>
-    )
-}
+export default Identitas
